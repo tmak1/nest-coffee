@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Coffee {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  brand    String?
+  flavours Flavour[]
+
+  @@map("coffee")
+}
+
+model Flavour {
+  id       String @id @default(uuid())
+  name     String @unique
+  coffee   Coffee @relation(fields: [coffeeId], references: [id])
+  coffeeId String
+
+  @@map("flavour")
+}
